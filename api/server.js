@@ -24,10 +24,14 @@ const MailCorrelator = require("../modules/mail-correlator");
 const CookieAudit = require("../modules/cookie-audit");
 const CookieCorrelator = require("../modules/cookie-correlator");
 const SEAwareness = require("../modules/se-awareness");
+const ThreatIntelligence = require("../modules/threat-intelligence");
 const AdvancedRecon = require("../modules/advanced-recon");
 const NetworkSniffer = require("../modules/network-sniffer");
 const ArpInspector = require("../modules/arp-inspector");
 const DnsMonitor = require("../modules/dns-monitor");
+const AttackSurfaceMapper = require("../modules/attack-surface-mapper");
+const RemediationEngine = require("../modules/remediation-engine");
+const ReportingEngine = require("../modules/reporting-engine");
 
 const app = express();
 const port = 3000;
@@ -56,10 +60,14 @@ const mailCorrelator = new MailCorrelator();
 const cookieAudit = new CookieAudit();
 const cookieCorrelator = new CookieCorrelator();
 const seAwareness = new SEAwareness();
+const threatIntelligence = new ThreatIntelligence();
 const advancedRecon = new AdvancedRecon(executor, parser);
 const networkSniffer = new NetworkSniffer(executor, parser);
 const arpInspector = new ArpInspector(executor, parser);
 const dnsMonitor = new DnsMonitor(executor, parser);
+const attackSurfaceMapper = new AttackSurfaceMapper(executor);
+const remediationEngine = new RemediationEngine();
+const reportingEngine = new ReportingEngine();
 
 // Initialize AGI Brain and register modules
 const agiBrain = new AGIBrain();
@@ -84,10 +92,14 @@ agiBrain.registerModule("mail-correlator", mailCorrelator);
 agiBrain.registerModule("cookie-audit", cookieAudit);
 agiBrain.registerModule("cookie-correlator", cookieCorrelator);
 agiBrain.registerModule("se-awareness", seAwareness);
+agiBrain.registerModule("threatIntelligence", threatIntelligence);
 agiBrain.registerModule("advanced-recon", advancedRecon);
 agiBrain.registerModule("network-sniffer", networkSniffer);
 agiBrain.registerModule("arp-inspector", arpInspector);
 agiBrain.registerModule("dns-monitor", dnsMonitor);
+agiBrain.registerModule("attackSurfaceMapper", attackSurfaceMapper);
+agiBrain.registerModule("remediationEngine", remediationEngine);
+agiBrain.registerModule("reportingEngine", reportingEngine);
 
 // API Endpoints
 app.post("/scan/basic", async (req, res) => {
@@ -268,6 +280,61 @@ app.post("/sniffer/analyze-dns-pcap", async (req, res) => {
         }
         const analysisResult = await dnsMonitor.analyzeDnsPcap(pcapFile);
         res.json(analysisResult);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post("/recon/attack-surface", async (req, res) => {
+    try {
+        const { domain } = req.body;
+        if (!domain) {
+            return res.status(400).json({ error: "Domain is required." });
+        }
+        const attackSurface = await attackSurfaceMapper.discoverWebAssets(domain);
+        res.json(attackSurface);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post("/remediation/generate", async (req, res) => {
+    try {
+        const { vulnerabilityReport } = req.body;
+        if (!vulnerabilityReport) {
+            return res.status(400).json({ error: "Vulnerability report is required." });
+        }
+        const remediation = await remediationEngine.generateScript(vulnerabilityReport);
+        res.json(remediation);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post("/report/generate", async (req, res) => {
+    try {
+        const { reportId, format = "markdown" } = req.body;
+        if (!reportId) {
+            return res.status(400).json({ error: "Report ID is required." });
+        }
+        const reportData = agiBrain.getReport(reportId);
+        if (!reportData) {
+            return res.status(404).json({ error: "Report not found." });
+        }
+
+        let generatedReport;
+        if (format === "markdown") {
+            generatedReport = await reportingEngine.generateMarkdownReport(reportData);
+            res.json({ format: "markdown", content: generatedReport });
+        } else if (format === "pdf") {
+            // For PDF generation, we'll generate markdown first and then convert it using a separate tool/process
+            const markdownContent = await reportingEngine.generateMarkdownReport(reportData);
+            // In a real scenario, this would trigger a background task to convert MD to PDF
+            // For now, we'll just return a message indicating it's not directly supported via API yet
+            res.status(501).json({ error: "PDF generation is not directly supported via API. Generate Markdown and use an external tool." });
+        } else {
+            res.status(400).json({ error: "Invalid report format. Supported formats: markdown, pdf." });
+        }
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

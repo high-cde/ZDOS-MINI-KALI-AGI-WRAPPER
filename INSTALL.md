@@ -8,7 +8,7 @@ Apri Termux sul tuo dispositivo Android ed esegui i seguenti comandi per aggiorn
 
 ```bash
 pkg update && pkg upgrade -y
-pkg install -y nodejs python nmap curl wget openssl whois traceroute dnsutils tcpdump tshark
+pkg install -y nodejs python nmap curl wget openssl whois traceroute dnsutils tcpdump tshark bind-utils
 ```
 
 *   `nodejs`: Ambiente di runtime per JavaScript, necessario per l'applicazione.
@@ -69,6 +69,9 @@ Esempi di utilizzo:
 *   **Recon Avanzato**: `zdos-mini scan advanced example.com`
 *   **Banner Grabbing**: `zdos-mini scan banner example.com 80`
 *   **Audit SSL**: `zdos-mini scan ssl example.com`
+*   **Attack Surface Mapping**: `zdos-mini scan attack-surface example.com`
+*   **Generazione Remediation**: `zdos-mini remediation generate report.json`
+*   **Generazione Report**: `zdos-mini report generate <report-id> markdown`
 *   **OSINT Completo**: `zdos-mini osint full example.com`
 *   **Audit Email**: `zdos-mini mail-audit email.txt` (dove `email.txt` contiene il contenuto dell'email)
 *   **Audit Cookie**: `zdos-mini cookie-audit cookie.json` (dove `cookie.json` contiene il JSON del cookie)

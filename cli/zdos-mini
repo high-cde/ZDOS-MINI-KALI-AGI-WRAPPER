@@ -50,8 +50,12 @@ async function main() {
                 console.log(`Auditing SSL for ${args[2]}...`);
                 const result = await callApi("/recon/ssl", { target: args[2] });
                 console.log(JSON.stringify(result, null, 2));
+            } else if (subcommand === "attack-surface" && value) {
+                console.log(`Mapping attack surface for ${value}...`);
+                const result = await callApi("/recon/attack-surface", { domain: value });
+                console.log(JSON.stringify(result, null, 2));
             } else {
-                console.log("Usage: zdos-mini scan basic <target> | advanced <target> | banner <target> <port> | ssl <target>");
+                console.log("Usage: zdos-mini scan basic <target> | advanced <target> | banner <target> <port> | ssl <target> | attack-surface <domain>");
             }
             break;
         case "osint":
@@ -133,13 +137,29 @@ async function main() {
                 console.log("Usage: zdos-mini sniffer capture <interface> [duration] [filter] | analyze-pcap <pcap-file> [display-filter] | arp-monitor <interface> [duration] | analyze-arp-pcap <pcap-file> | dns-monitor <interface> [duration] | analyze-dns-pcap <pcap-file>");
             }
             break;
+        case "remediation":
+            if (subcommand === "generate" && value) {
+                const vulnerabilityReport = require("fs").readFileSync(value, "utf8");
+                console.log(`Generating remediation script from ${value}...`);
+                const result = await callApi("/remediation/generate", { vulnerabilityReport: JSON.parse(vulnerabilityReport) });
+                console.log(JSON.stringify(result, null, 2));
+            } else {
+                console.log("Usage: zdos-mini remediation generate <vulnerability-report-file>");
+            }
+            break;
         case "report":
-            if (value) {
+            if (subcommand === "generate" && args[2]) {
+                const reportId = args[2];
+                const format = args[3] || "markdown";
+                console.log(`Generating ${format} report for ID ${reportId}...`);
+                const result = await callApi("/report/generate", { reportId, format });
+                console.log(JSON.stringify(result, null, 2));
+            } else if (value) {
                 console.log(`Retrieving report for ID ${value}...`);
-                // This would be a GET request, so we'll simulate it for now
+                // This would be a GET request, so we\'ll simulate it for now
                 console.log(`GET ${API_BASE_URL}/report/${value} (Not yet implemented on API side)`);
             } else {
-                console.log("Usage: zdos-mini report <id>");
+                console.log("Usage: zdos-mini report generate <report-id> [format] | report <id>");
             }
             break;
         default:

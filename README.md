@@ -1,6 +1,6 @@
 # ZDOS MINI-KALI AGI WRAPPER – Termux OMEGA-DEFENSE v3
 
-Un orchestratore di cybersecurity AGI-driven progettato per girare su Termux (Android), utilizzando tool reali (mini-Kali compatibili) per analisi difensive, piani di hardening e briefing anti-phishing/anti-social engineering.
+ZDOS-MINI-KALI-AGI-WRAPPER è una piattaforma di cybersecurity d'élite, orchestrata da un motore AGI avanzato e progettata per l'ambiente Termux su Android. Trasforma il tuo dispositivo in un mini-SOC (Security Operations Center) portatile, capace di eseguire Threat Hunting, Attack Surface Mapping e Automated Hardening con precisione chirurgica.
 
 ## Goal del Progetto
 
@@ -17,7 +17,8 @@ Creare un sistema portatile che agisce come un mini-SOC (Security Operations Cen
 *   **Linguaggi**: Node.js (preferito) + Python (per eventuali script di supporto)
 *   **Tool Esterni Previsti (installati dall'utente)**:
     *   `nmap`, `curl`, `wget`, `openssl`, `whois`, `traceroute`, `dnsutils`
-    *   `tcpdump`, `tshark` (per funzionalità di sniffing)
+    *   `tcpdump`, `tshark` (per sniffing passivo)
+    *   `dig` (per subdomain enumeration avanzata)
 *   **Interfaccia**: Solo CLI + API REST (nessuna dipendenza da GUI).
 
 ## Architettura di Progetto
@@ -32,6 +33,10 @@ Il progetto è strutturato nei seguenti moduli e directory:
 │   ├── executor.js         # Wrapper sicuro per comandi esterni
 │   ├── parser.js           # Parser output tecnico (nmap, curl, whois, openssl) -> JSON
 │   ├── correlator.js       # Correlazione Recon + TLS + WHOIS + DNS -> risk map
+│   ├── threat-intelligence.js # Integrazione real-time con AbuseIPDB e OTX
+│   ├── attack-surface-mapper.js # Subdomain enumeration e Cloud Bucket discovery
+│   ├── remediation-engine.js # Generazione automatica di script di hardening
+│   ├── reporting-engine.js   # Generazione report professionali in Markdown/PDF
 │   │
 │   ├── osint.js            # OSINT classico (whois, DNS, crt.sh, ipinfo, Wayback)
 │   ├── osint-parser.js     # Normalizzazione OSINT -> JSON
