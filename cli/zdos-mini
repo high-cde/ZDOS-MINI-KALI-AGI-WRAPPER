@@ -162,6 +162,49 @@ async function main() {
                 console.log("Usage: zdos-mini report generate <report-id> [format] | report <id>");
             }
             break;
+        case "monitor":
+            if (subcommand === "start" && value) {
+                const interval = args[3] ? parseInt(args[3]) : undefined;
+                console.log(`Starting autonomous monitoring for ${value} with interval ${interval || 'default'}...`);
+                const result = await callApi("/monitor/start", { target: value, interval });
+                console.log(JSON.stringify(result, null, 2));
+            } else if (subcommand === "stop") {
+                console.log("Stopping autonomous monitoring...");
+                const result = await callApi("/monitor/stop");
+                console.log(JSON.stringify(result, null, 2));
+            } else if (subcommand === "status") {
+                console.log("Checking autonomous monitoring status...");
+                const result = await callApi("/monitor/status");
+                console.log(JSON.stringify(result, null, 2));
+            } else {
+                console.log("Usage: zdos-mini monitor start <target> [interval_ms] | stop | status");
+            }
+            break;
+        case "fuzz":
+            if (subcommand === "ffuf" && value) {
+                const url = value;
+                const wordlistPath = args[3] || "/usr/share/wordlists/dirbuster/directory-list-2.3-small.txt";
+                const extensions = args[4] || "html,php,asp,aspx,jsp,txt,json,xml";
+                console.log(`Starting FFUF fuzzing on ${url}...`);
+                const result = await callApi("/fuzzing/ffuf", { url, wordlistPath, extensions });
+                console.log(JSON.stringify(result, null, 2));
+            } else if (subcommand === "gobuster-dir" && value) {
+                const url = value;
+                const wordlistPath = args[3] || "/usr/share/wordlists/dirbuster/directory-list-2.3-small.txt";
+                const extensions = args[4] || "html,php,txt";
+                console.log(`Starting Gobuster directory enumeration on ${url}...`);
+                const result = await callApi("/fuzzing/gobuster-dir", { url, wordlistPath, extensions });
+                console.log(JSON.stringify(result, null, 2));
+            } else if (subcommand === "gobuster-vhost" && value) {
+                const domain = value;
+                const wordlistPath = args[3] || "/usr/share/wordlists/dirbuster/VHOSTS.txt";
+                console.log(`Starting Gobuster VHost enumeration on ${domain}...`);
+                const result = await callApi("/fuzzing/gobuster-vhost", { domain, wordlistPath });
+                console.log(JSON.stringify(result, null, 2));
+            } else {
+                console.log("Usage: zdos-mini fuzz ffuf <url> [wordlist] [extensions] | gobuster-dir <url> [wordlist] [extensions] | gobuster-vhost <domain> [wordlist]");
+            }
+            break;
         default:
             console.log("Usage: zdos-mini <command> [subcommand] [value]");
             console.log("Commands: scan, osint, mail-audit, cookie-audit, se-check, sniffer, report");

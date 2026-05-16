@@ -1,14 +1,19 @@
 // agi-brain.js
+const NeuralAnalysisEngine = require("../modules/neural-analysis-engine");
 // Motore di reasoning AGI avanzato, orchestrazione di tutti i moduli
 
 class AGIBrain {
     constructor() {
         this.modules = {};
         this.reports = {}; // Store generated reports
+        this.neuralAnalysisEngine = null; // Will be set via registerModule
     }
 
     registerModule(name, moduleInstance) {
         this.modules[name] = moduleInstance;
+        if (name === "neuralAnalysisEngine") {
+            this.neuralAnalysisEngine = moduleInstance;
+        }
     }
 
     async orchestrate(task, data) {
@@ -212,6 +217,16 @@ class AGIBrain {
 
         // Final AGI reasoning to combine results, generate threat profiles, etc.
         const finalReport = this.generateReport(task, results, currentRiskLevel, issues, notes);
+
+        // Perform neural analysis if requested or if certain conditions are met
+        if (this.neuralAnalysisEngine && (currentRiskLevel === "high" || issues.length > 0)) {
+            console.log("Performing neural analysis...");
+            const neuralInsights = await this.neuralAnalysisEngine.analyze(finalReport);
+            finalReport.neuralInsights = neuralInsights;
+            finalReport.executiveSummary = neuralInsights.executive_summary;
+            finalReport.defensePlan = neuralInsights.hardening_plan;
+            finalReport.exploitSuggestions = neuralInsights.exploit_suggestions;
+        }
         this.reports[finalReport.id] = finalReport; // Store report for retrieval
         return finalReport;
     }

@@ -20,6 +20,7 @@
   "dependencies": {
     "express": "^4.19.2",
     "exifreader": "^4.20.0",
-    "axios": "^1.7.2"
+    "axios": "^1.7.2",
+    "openai": "^4.0.0"
   }
 }

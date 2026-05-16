@@ -25,6 +25,7 @@ const CookieAudit = require("../modules/cookie-audit");
 const CookieCorrelator = require("../modules/cookie-correlator");
 const SEAwareness = require("../modules/se-awareness");
 const ThreatIntelligence = require("../modules/threat-intelligence");
+const NeuralAnalysisEngine = require("../modules/neural-analysis-engine");
 const AdvancedRecon = require("../modules/advanced-recon");
 const NetworkSniffer = require("../modules/network-sniffer");
 const ArpInspector = require("../modules/arp-inspector");
@@ -32,6 +33,8 @@ const DnsMonitor = require("../modules/dns-monitor");
 const AttackSurfaceMapper = require("../modules/attack-surface-mapper");
 const RemediationEngine = require("../modules/remediation-engine");
 const ReportingEngine = require("../modules/reporting-engine");
+const AutonomousMonitor = require("../modules/autonomous-monitor");
+const AdvancedFuzzing = require("../modules/advanced-fuzzing");
 
 const app = express();
 const port = 3000;
@@ -61,6 +64,7 @@ const cookieAudit = new CookieAudit();
 const cookieCorrelator = new CookieCorrelator();
 const seAwareness = new SEAwareness();
 const threatIntelligence = new ThreatIntelligence();
+const neuralAnalysisEngine = new NeuralAnalysisEngine();
 const advancedRecon = new AdvancedRecon(executor, parser);
 const networkSniffer = new NetworkSniffer(executor, parser);
 const arpInspector = new ArpInspector(executor, parser);
@@ -68,6 +72,8 @@ const dnsMonitor = new DnsMonitor(executor, parser);
 const attackSurfaceMapper = new AttackSurfaceMapper(executor);
 const remediationEngine = new RemediationEngine();
 const reportingEngine = new ReportingEngine();
+const autonomousMonitor = new AutonomousMonitor(agiBrain);
+const advancedFuzzing = new AdvancedFuzzing(executor, parser);
 
 // Initialize AGI Brain and register modules
 const agiBrain = new AGIBrain();
@@ -93,6 +99,7 @@ agiBrain.registerModule("cookie-audit", cookieAudit);
 agiBrain.registerModule("cookie-correlator", cookieCorrelator);
 agiBrain.registerModule("se-awareness", seAwareness);
 agiBrain.registerModule("threatIntelligence", threatIntelligence);
+agiBrain.registerModule("neuralAnalysisEngine", neuralAnalysisEngine);
 agiBrain.registerModule("advanced-recon", advancedRecon);
 agiBrain.registerModule("network-sniffer", networkSniffer);
 agiBrain.registerModule("arp-inspector", arpInspector);
@@ -100,6 +107,8 @@ agiBrain.registerModule("dns-monitor", dnsMonitor);
 agiBrain.registerModule("attackSurfaceMapper", attackSurfaceMapper);
 agiBrain.registerModule("remediationEngine", remediationEngine);
 agiBrain.registerModule("reportingEngine", reportingEngine);
+agiBrain.registerModule("autonomousMonitor", autonomousMonitor);
+agiBrain.registerModule("advancedFuzzing", advancedFuzzing);
 
 // API Endpoints
 app.post("/scan/basic", async (req, res) => {
@@ -335,6 +344,76 @@ app.post("/report/generate", async (req, res) => {
         } else {
             res.status(400).json({ error: "Invalid report format. Supported formats: markdown, pdf." });
         }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post("/monitor/start", async (req, res) => {
+    try {
+        const { target, interval } = req.body;
+        if (!target) {
+            return res.status(400).json({ error: "Target is required." });
+        }
+        const result = await autonomousMonitor.startMonitoring(target, interval);
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post("/monitor/stop", async (req, res) => {
+    try {
+        const result = autonomousMonitor.stopMonitoring();
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get("/monitor/status", async (req, res) => {
+    try {
+        const status = autonomousMonitor.getStatus();
+        res.json(status);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post("/fuzzing/ffuf", async (req, res) => {
+    try {
+        const { url, wordlistPath, extensions } = req.body;
+        if (!url) {
+            return res.status(400).json({ error: "URL is required." });
+        }
+        const results = await advancedFuzzing.fuzzUrl(url, wordlistPath, extensions);
+        res.json(results);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post("/fuzzing/gobuster-dir", async (req, res) => {
+    try {
+        const { url, wordlistPath, extensions } = req.body;
+        if (!url) {
+            return res.status(400).json({ error: "URL is required." });
+        }
+        const results = await advancedFuzzing.gobustDir(url, wordlistPath, extensions);
+        res.json(results);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post("/fuzzing/gobuster-vhost", async (req, res) => {
+    try {
+        const { domain, wordlistPath } = req.body;
+        if (!domain) {
+            return res.status(400).json({ error: "Domain is required." });
+        }
+        const results = await advancedFuzzing.gobustVhost(domain, wordlistPath);
+        res.json(results);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

@@ -37,6 +37,9 @@ Il progetto è strutturato nei seguenti moduli e directory:
 │   ├── attack-surface-mapper.js # Subdomain enumeration e Cloud Bucket discovery
 │   ├── remediation-engine.js # Generazione automatica di script di hardening
 │   ├── reporting-engine.js   # Generazione report professionali in Markdown/PDF
+│   ├── neural-analysis-engine.js # Analisi dei risultati tramite LLM per insight profondi
+│   ├── autonomous-monitor.js   # Monitoraggio continuo e reattivo (Daemon Mode)
+│   ├── advanced-fuzzing.js     # Fuzzing avanzato con FFUF e Gobuster
 │   │
 │   ├── osint.js            # OSINT classico (whois, DNS, crt.sh, ipinfo, Wayback)
 │   ├── osint-parser.js     # Normalizzazione OSINT -> JSON
@@ -80,7 +83,9 @@ Il progetto è strutturato nei seguenti moduli e directory:
 
 Il sistema offre le seguenti funzionalità, raggruppate per modulo:
 
-*   **`agi-brain.js`**: Il cuore del sistema, orchestra l'esecuzione dei moduli, correla i risultati e genera report completi, profili di minaccia, mappe della superficie di attacco, punteggi di esposizione, piani di difesa e checklist operative.
+    *   **`agi-brain.js`**: Il cuore del sistema, orchestra l'esecuzione dei moduli, correla i risultati e, tramite il Neural Analysis Engine, genera report completi, profili di minaccia, mappe della superficie di attacco, punteggi di esposizione, piani di difesa, checklist operative e suggerimenti di exploit path (a scopo difensivo/educativo).
+*   **`autonomous-monitor.js`**: Abilita una modalità daemon per il monitoraggio continuo di target specifici, eseguendo scansioni periodiche e notificando i cambiamenti.
+*   **`advanced-fuzzing.js`**: Integra FFUF e Gobuster per la scoperta di directory, file, vhost e endpoint nascosti, ampliando la superficie di attacco analizzata.
 
 *   **`executor.js`**: Esegue comandi esterni in modo sicuro, sanitizzando l'input e gestendo i timeout. Supporta `nmap`, `curl`, `whois`, `openssl`, `tcpdump`, `tshark`.
 
