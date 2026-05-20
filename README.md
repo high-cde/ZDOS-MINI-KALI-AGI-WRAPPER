@@ -1,29 +1,27 @@
 # ZDOS MINI-KALI AGI WRAPPER – Termux OMEGA-DEFENSE v3
 
-ZDOS-MINI-KALI-AGI-WRAPPER è una piattaforma di cybersecurity d'élite, orchestrata da un motore AGI avanzato e progettata per l'ambiente Termux su Android. Trasforma il tuo dispositivo in un mini-SOC (Security Operations Center) portatile, capace di eseguire Threat Hunting, Attack Surface Mapping e Automated Hardening con precisione chirurgica.
+## Piattaforma di Cybersecurity d'Élite con Intelligenza Artificiale Generale (AGI)
 
-## Goal del Progetto
+**ZDOS-MINI-KALI-AGI-WRAPPER** è una piattaforma di cybersecurity all'avanguardia, progettata per trasformare il tuo dispositivo Termux su Android in un **Mini-SOC (Security Operations Center) portatile**. Orchestrata da un motore AGI avanzato, questa soluzione offre capacità di Threat Hunting, Attack Surface Mapping e Automated Hardening con precisione chirurgica, integrandosi perfettamente nell'ecosistema **ZDOS**.
 
-Creare un sistema portatile che agisce come un mini-SOC (Security Operations Center) basato su AGI, capace di:
+### Obiettivo del Progetto
 
-*   Utilizzare tool di cybersecurity reali come motore tecnico.
-*   Wrappare e normalizzare l'output di questi tool.
-*   Correlare dati da OSINT, Recon, Mail, Cookie, Social e Visual.
-*   Generare analisi difensive, piani di hardening e briefing contro phishing e social engineering.
+L'obiettivo principale è creare un sistema portatile basato su AGI che agisca come un Mini-SOC, capace di:
 
-## Ambiente Target
+*   **Orchestrazione Intelligente**: Utilizzare tool di cybersecurity reali come motore tecnico, wrappando e normalizzando il loro output.
+*   **Correlazione Dati Avanzata**: Correlare dati provenienti da OSINT, Recon, Mail, Cookie, Social e Visual per una visione olistica.
+*   **Analisi e Difesa Automatica**: Generare analisi difensive, piani di hardening personalizzati e briefing contro phishing e social engineering.
+
+### Ambiente Target
 
 *   **Sistema Operativo**: Termux su Android
-*   **Linguaggi**: Node.js (preferito) + Python (per eventuali script di supporto)
-*   **Tool Esterni Previsti (installati dall'utente)**:
-    *   `nmap`, `curl`, `wget`, `openssl`, `whois`, `traceroute`, `dnsutils`
-    *   `tcpdump`, `tshark` (per sniffing passivo)
-    *   `dig` (per subdomain enumeration avanzata)
+*   **Linguaggi**: Node.js (preferito) + Python (per script di supporto)
+*   **Tool Esterni (installati dall'utente)**: `nmap`, `curl`, `wget`, `openssl`, `whois`, `traceroute`, `dnsutils`, `tcpdump`, `tshark`, `dig`.
 *   **Interfaccia**: Solo CLI + API REST (nessuna dipendenza da GUI).
 
-## Architettura di Progetto
+## Architettura del Progetto
 
-Il progetto è strutturato nei seguenti moduli e directory:
+Il progetto è modularizzato per garantire scalabilità e manutenibilità. La struttura include un **core AGI** per il ragionamento e l'orchestrazione, e una serie di **moduli specializzati** per diverse funzioni di cybersecurity.
 
 ```
 /ZDOS-MINI-KALI-AGI-WRAPPER
@@ -81,36 +79,38 @@ Il progetto è strutturato nei seguenti moduli e directory:
 
 ## Funzionalità Chiave
 
-Il sistema offre le seguenti funzionalità, raggruppate per modulo:
+Il sistema offre un set completo di funzionalità, raggruppate per aree tematiche:
 
-    *   **`agi-brain.js`**: Il cuore del sistema, orchestra l'esecuzione dei moduli, correla i risultati e, tramite il Neural Analysis Engine, genera report completi, profili di minaccia, mappe della superficie di attacco, punteggi di esposizione, piani di difesa, checklist operative e suggerimenti di exploit path (a scopo difensivo/educativo).
+### 🧠 Intelligenza Artificiale Generale (AGI) e Orchestrazione
+*   **`agi-brain.js`**: Il cuore del sistema, orchestra l'esecuzione dei moduli, correla i risultati e, tramite il Neural Analysis Engine, genera report completi, profili di minaccia, mappe della superficie di attacco, punteggi di esposizione, piani di difesa, checklist operative e suggerimenti di exploit path (a scopo difensivo/educativo).
 *   **`autonomous-monitor.js`**: Abilita una modalità daemon per il monitoraggio continuo di target specifici, eseguendo scansioni periodiche e notificando i cambiamenti.
 *   **`advanced-fuzzing.js`**: Integra FFUF e Gobuster per la scoperta di directory, file, vhost e endpoint nascosti, ampliando la superficie di attacco analizzata.
 
+### 🛠️ Esecuzione e Parsing di Tool
 *   **`executor.js`**: Esegue comandi esterni in modo sicuro, sanitizzando l'input e gestendo i timeout. Supporta `nmap`, `curl`, `whois`, `openssl`, `tcpdump`, `tshark`.
-
 *   **`parser.js`**: Converte l'output grezzo dei tool tecnici (Nmap, cURL, WHOIS, OpenSSL, TShark) in un formato JSON strutturato.
 
+### 🔗 Correlazione e Analisi Dati
 *   **`correlator.js`**: Correlazione avanzata dei dati di Recon, TLS, WHOIS e DNS per generare una mappa del rischio.
 
-*   **Moduli OSINT (`osint*`)**:
-    *   Raccolgono e normalizzano dati da fonti pubbliche come WHOIS, DNS, crt.sh, ipinfo, Wayback Machine.
-    *   **`social-osint.js`**: Raccoglie OSINT da profili tecnici pubblici (es. GitHub).
-    *   **`dark-osint.js`**: Utilizza feed pubblici di IOC (Indicatori di Compromissione) e blacklist per identificare rischi reputazionali o compromissioni pregresse.
-    *   **`visual-osint.js`**: Analizza i metadati EXIF di immagini locali fornite dall'utente per estrarre informazioni come dispositivo, timestamp e geotag.
+### 🕵️‍♂️ Moduli OSINT (Open Source Intelligence)
+*   **OSINT Classico (`osint*`)**: Raccolgono e normalizzano dati da fonti pubbliche come WHOIS, DNS, crt.sh, ipinfo, Wayback Machine.
+*   **`social-osint.js`**: Raccoglie OSINT da profili tecnici pubblici (es. GitHub).
+*   **`dark-osint.js`**: Utilizza feed pubblici di IOC (Indicatori di Compromissione) e blacklist per identificare rischi reputazionali o compromissioni pregresse.
+*   **`visual-osint.js`**: Analizza i metadati EXIF di immagini locali fornite dall'utente per estrarre informazioni come dispositivo, timestamp e geotag.
 
-*   **Moduli di Difesa Specifici**:
-    *   **`mail-defense.js`**: Analizza le email (header, SPF/DKIM/DMARC, link sospetti) per determinare la probabilità di phishing e fornire suggerimenti difensivi.
-    *   **`cookie-audit.js`**: Valuta la sicurezza dei cookie forniti dall'utente (flag Secure, HttpOnly, SameSite, scope, durata) per identificare rischi di session hijacking.
-    *   **`se-awareness.js`**: Analizza testi e messaggi per rilevare pattern di social engineering, fornendo consigli comportamentali (solo per difesa e training).
+### 🛡️ Moduli di Difesa Specifici
+*   **`mail-defense.js`**: Analizza le email (header, SPF/DKIM/DMARC, link sospetti) per determinare la probabilità di phishing e fornire suggerimenti difensivi.
+*   **`cookie-audit.js`**: Valuta la sicurezza dei cookie forniti dall'utente (flag Secure, HttpOnly, SameSite, scope, durata) per identificare rischi di session hijacking.
+*   **`se-awareness.js`**: Analizza testi e messaggi per rilevare pattern di social engineering, fornendo consigli comportamentali (solo per difesa e training).
 
-*   **Moduli Offensivi Legali (per scopi difensivi e di test)**:
-    *   **`advanced-recon.js`**: Esegue scansioni Nmap avanzate (stealth, service detection, OS detection), banner grabbing e audit SSL/TLS per identificare vulnerabilità e configurazioni errate.
+### 🔍 Moduli Offensivi Legali (per scopi difensivi e di test)
+*   **`advanced-recon.js`**: Esegue scansioni Nmap avanzate (stealth, service detection, OS detection), banner grabbing e audit SSL/TLS per identificare vulnerabilità e configurazioni errate.
 
-*   **Moduli di Sniffing (per analisi passiva del traffico)**:
-    *   **`network-sniffer.js`**: Cattura e analizza il traffico di rete utilizzando `tcpdump` e `tshark`.
-    *   **`arp-inspector.js`**: Monitora il traffico ARP per rilevare anomalie o potenziali attacchi ARP spoofing.
-    *   **`dns-monitor.js`**: Monitora il traffico DNS per identificare query sospette o risoluzioni anomale.
+### 📡 Moduli di Sniffing (per analisi passiva del traffico)
+*   **`network-sniffer.js`**: Cattura e analizza il traffico di rete utilizzando `tcpdump` e `tshark`.
+*   **`arp-inspector.js`**: Monitora il traffico ARP per rilevare anomalie o potenziali attacchi ARP spoofing.
+*   **`dns-monitor.js`**: Monitora il traffico DNS per identificare query sospette o risoluzioni anomale.
 
 ## Constraint (Obbligatorie)
 
