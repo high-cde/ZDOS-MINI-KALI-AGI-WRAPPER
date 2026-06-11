@@ -72,11 +72,11 @@ const dnsMonitor = new DnsMonitor(executor, parser);
 const attackSurfaceMapper = new AttackSurfaceMapper(executor);
 const remediationEngine = new RemediationEngine();
 const reportingEngine = new ReportingEngine();
-const autonomousMonitor = new AutonomousMonitor(agiBrain);
 const advancedFuzzing = new AdvancedFuzzing(executor, parser);
 
 // Initialize AGI Brain and register modules
 const agiBrain = new AGIBrain();
+const autonomousMonitor = new AutonomousMonitor(agiBrain);
 agiBrain.registerModule("executor", executor);
 agiBrain.registerModule("parser", parser);
 agiBrain.registerModule("correlator", correlator);

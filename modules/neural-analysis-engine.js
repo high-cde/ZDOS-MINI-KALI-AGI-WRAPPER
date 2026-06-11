@@ -24,7 +24,7 @@ Rispondi in formato JSON con le seguenti chiavi: 'explanation', 'exploit_suggest
 
         try {
             const chatCompletion = await this.openai.chat.completions.create({
-                model: "gpt-4.1-mini", // Using a suitable model for analysis
+                model: "gpt-4o-mini", // Using a suitable model for analysis (gpt-4o-mini is more recent and cost-effective)
                 messages: [{
                     role: "user",
                     content: prompt

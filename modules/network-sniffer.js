@@ -11,7 +11,9 @@ class NetworkSniffer {
         // Uses tcpdump for packet capture. Requires root privileges.
         // In Termux, tcpdump might need special setup or root.
         // For legal and ethical reasons, this should only be used on networks the user has explicit permission to monitor.
-        const args = [`-i`, interfaceName, `-c`, String(durationSeconds), `-w`, `/tmp/capture_${Date.now()}.pcap`];
+        const timestamp = Date.now();
+        const pcapFile = `/tmp/capture_${timestamp}.pcap`;
+        const args = [`-i`, interfaceName, `-c`, String(durationSeconds), `-w`, pcapFile];
         if (filter) {
             args.push(filter);
         }
@@ -20,7 +22,6 @@ class NetworkSniffer {
             console.log(`Starting packet capture on ${interfaceName} for ${durationSeconds} seconds...`);
             // tcpdump will run in background, so we need to wait for it to finish
             await this.executor.executeCommand("tcpdump", args, (durationSeconds + 5) * 1000); // Add 5 seconds buffer
-            const pcapFile = `/tmp/capture_${Date.now()}.pcap`;
             console.log(`Packet capture saved to ${pcapFile}`);
             return { pcapFile: pcapFile, message: "Packet capture completed. Analyze with tshark or similar." };
         } catch (error) {

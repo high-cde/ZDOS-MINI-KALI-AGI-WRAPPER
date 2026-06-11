@@ -9,12 +9,13 @@ class ArpInspector {
 
     async monitorArp(interfaceName, durationSeconds = 10) {
         // Uses tcpdump to capture ARP traffic. Requires root privileges.
-        const args = [`-i`, interfaceName, `-c`, String(durationSeconds), `-w`, `/tmp/arp_capture_${Date.now()}.pcap`, `arp`];
+        const timestamp = Date.now();
+        const pcapFile = `/tmp/arp_capture_${timestamp}.pcap`;
+        const args = [`-i`, interfaceName, `-c`, String(durationSeconds), `-w`, pcapFile, `arp`];
 
         try {
             console.log(`Starting ARP monitoring on ${interfaceName} for ${durationSeconds} seconds...`);
             await this.executor.executeCommand("tcpdump", args, (durationSeconds + 5) * 1000);
-            const pcapFile = `/tmp/arp_capture_${Date.now()}.pcap`;
             console.log(`ARP capture saved to ${pcapFile}`);
             return { pcapFile: pcapFile, message: "ARP capture completed. Analyze with tshark or similar." };
         } catch (error) {

@@ -35,7 +35,7 @@ class AdvancedFuzzing {
             // Ensure gobuster is installed.
             const command = `gobuster dir -u ${url} -w ${wordlistPath} -x ${extensions} -q`;
             const rawResult = await this.executor.executeCommand("bash", ["-c", command]);
-            return this.parser.parseGobusterOutput(rawResult);
+            return this.parser.parse("gobuster", rawResult);
         } catch (error) {
             console.error(`Error during Gobuster directory enumeration: ${error.message}`);
             return { error: `Gobuster command failed: ${error.message}` };
@@ -47,7 +47,7 @@ class AdvancedFuzzing {
         try {
             const command = `gobuster vhost -u ${domain} -w ${wordlistPath} -q`;
             const rawResult = await this.executor.executeCommand("bash", ["-c", command]);
-            return this.parser.parseGobusterOutput(rawResult);
+            return this.parser.parse("gobuster", rawResult);
         } catch (error) {
             console.error(`Error during Gobuster VHost enumeration: ${error.message}`);
             return { error: `Gobuster VHost command failed: ${error.message}` };

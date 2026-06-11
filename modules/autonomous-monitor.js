@@ -9,14 +9,16 @@ class AutonomousMonitor {
         this.monitorIntervalId = null;
     }
 
-    async startMonitoring(target) {
+    async startMonitoring(target, interval = null) {
         if (this.monitoringActive) {
             console.log("Monitoring is already active.");
             return { status: "already_active" };
         }
 
+        // Use provided interval or fall back to instance interval
+        const monitoringInterval = interval !== null ? interval : this.interval;
         this.monitoringActive = true;
-        console.log(`Starting autonomous monitoring for ${target} every ${this.interval / 1000} seconds.`);
+        console.log(`Starting autonomous monitoring for ${target} every ${monitoringInterval / 1000} seconds.`);
 
         const runScan = async () => {
             console.log(`Running scheduled scan for ${target}...`);
@@ -31,9 +33,9 @@ class AutonomousMonitor {
 
         // Run immediately and then at intervals
         runScan();
-        this.monitorIntervalId = setInterval(runScan, this.interval);
+        this.monitorIntervalId = setInterval(runScan, monitoringInterval);
 
-        return { status: "monitoring_started", target: target, interval: this.interval };
+        return { status: "monitoring_started", target: target, interval: monitoringInterval };
     }
 
     stopMonitoring() {

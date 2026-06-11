@@ -24,10 +24,12 @@ class AdvancedRecon {
 
     async bannerGrabbing(target, port) {
         // Use netcat or curl to grab banners
-        // For simplicity, we'll use curl for HTTP/HTTPS banners first
-        const url = `http://${target}:${port}`;
+        // For simplicity, we'll use curl for HTTP/HTTPS banners
+        // Determine protocol based on port
+        const protocol = port === 443 ? 'https' : 'http';
+        const url = `${protocol}://${target}:${port}`;
         try {
-            const rawOutput = await this.executor.executeCommand("curl", ["-I", url, "--max-time", "5"]);
+            const rawOutput = await this.executor.executeCommand("curl", ["-I", url, "--max-time", "5", "-k"]);
             return this.parser.parse("curl_headers", rawOutput);
         } catch (error) {
             console.error(`Error during banner grabbing for ${target}:${port}: ${error.message}`);

@@ -40,7 +40,9 @@ class ThreatIntelligence {
 
         // OTX (AlienVault Open Threat Exchange) lookup for both IPs and domains
         try {
-            const response = await axios.get(`https://otx.alienvault.com/api/v1/indicators/IPv4/${indicator}/general`, {
+            // Determine the correct endpoint based on indicator type
+            const indicatorType = isIp ? 'IPv4' : 'domain';
+            const response = await axios.get(`https://otx.alienvault.com/api/v1/indicators/${indicatorType}/${indicator}/general`, {
                 headers: {
                     "X-OTX-API-KEY": this.otxApiKey
                 }
