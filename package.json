@@ -15,7 +15,7 @@
     "sniffing",
     "offensive-security"
   ],
-  "author": "Manus AI",
+  "author": "ZDOS Team",
   "license": "MIT",
   "dependencies": {
     "express": "^4.19.2",

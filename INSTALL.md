@@ -26,11 +26,11 @@ Clona il repository del progetto nella tua directory home di Termux:
 
 ```bash
 cd ~
-git clone https://github.com/YOUR_GITHUB_USERNAME/ZDOS-MINI-KALI-AGI-WRAPPER.git
+git clone https://github.com/high-cde/ZDOS-MINI-KALI-AGI-WRAPPER.git
 cd ZDOS-MINI-KALI-AGI-WRAPPER
 ```
 
-**Nota**: Sostituisci `YOUR_GITHUB_USERNAME` con il tuo nome utente GitHub.
+**Nota**: Clona il repository ufficiale di ZDOS.
 
 ### 3. Installazione delle Dipendenze Node.js
 

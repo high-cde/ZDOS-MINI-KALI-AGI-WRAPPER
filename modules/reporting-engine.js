@@ -59,7 +59,7 @@ class ReportingEngine {
         return markdown;
     }
 
-    // PDF generation will be handled by an external tool (manus-md-to-pdf) after markdown is generated
+    // PDF generation will be handled by an external tool after markdown is generated
 }
 
 module.exports = ReportingEngine;
